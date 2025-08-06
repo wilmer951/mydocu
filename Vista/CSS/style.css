@@ -1,0 +1,26 @@
+:root {
+  --original: black; /* o el color que prefieras */
+  --white: #ffffff;
+}
+
+.spinner {
+  margin: 20px auto;
+  width: 40px;
+  height: 40px;
+  border: 5px solid #ccc;
+  border-top-color: #42b983; /* color Vue */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.form-control:focus {
+  border-color: var(--original) !important;
+  box-shadow: 0 0 10px 0 var(--original) !important;
+  outline: none !important;
+}
