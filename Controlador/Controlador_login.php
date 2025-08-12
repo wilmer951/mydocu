@@ -1,13 +1,13 @@
 <?php
 
-
+require_once "jwt_helper.php";
 
 class Controlador_login {
 
     // ********************* METODO LOGIN  *******************************    
 public static function loginControlador($usuario, $password){
 
-
+   $secret_key = "alkejlkmfielsl"; // Cambia esto por algo seguro
                 
     $nameusuario=strtoupper($usuario);
 
@@ -40,10 +40,20 @@ public static function loginControlador($usuario, $password){
             $_SESSION["usuario"] = $respuesta["usuario"];
             $_SESSION["nameusr"] = $respuesta["nombres"];
             $_SESSION["id"] = $respuesta["id"];
-            $onllogin=$respuesta["id_login"];
-                    
+            
 
-            return ["estado" => true, "mensaje" => "datos incorrectos"];
+                $payload = [
+                "user" => $respuesta["usuario"],
+                "name" => $respuesta["nombres"],
+                "id" => $respuesta["id"],
+                "iat" => time(),
+                "exp" => time() + 3600 // token válido 1 hora
+                    
+                 ];
+
+            $token = generate_jwt($payload, $secret_key);
+
+            return ["estado" => true, "mensaje" => "Login exitoso", "token" => $token];
                     
 
             
