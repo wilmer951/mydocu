@@ -39,6 +39,7 @@ public static function loginControlador($usuario, $password){
             $_SESSION["validar"] = true;
             $_SESSION["usuario"] = $respuesta["usuario"];
             $_SESSION["nameusr"] = $respuesta["nombres"];
+            $_SESSION["rol"] = $respuesta["rol"];
             $_SESSION["id"] = $respuesta["id"];
             
 
@@ -46,6 +47,7 @@ public static function loginControlador($usuario, $password){
                 "user" => $respuesta["usuario"],
                 "name" => $respuesta["nombres"],
                 "id" => $respuesta["id"],
+                    "rol" => $respuesta["rol"], // ✅ Añadir el rol
                 "iat" => time(),
                 "exp" => time() + 3600 // token válido 1 hora
                     
