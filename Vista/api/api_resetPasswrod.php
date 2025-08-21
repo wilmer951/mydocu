@@ -5,6 +5,21 @@ require_once "../../Middleware/auth_middleware.php";
 
 header('Content-Type: application/json');
 
+// Verificación de autenticación vía JWT
+$headers = getallheaders();
+$rol = null;
+
+$payload = authenticate(); // <- Tu función del middleware
+
+if ($payload) {
+    $rol = $payload["rol"] ?? null;
+}
+
+if ($rol !== 1) {
+    http_response_code(403);
+    echo json_encode(["error" => "No tienes permisos"]);
+    exit;
+}
 
 
 
@@ -42,7 +57,7 @@ function resetearPassword() {
 
 
 
-     $respuesta = Controlador_usuarios::resetPawwordControlador($data['id_usuario'],$data['nuevaPassword']);
+     $respuesta = Controlador_usuarios::resetPawwordControlador($data['id_usuario'],$data['id_usuario']);
 
        echo json_encode($respuesta);
 }
