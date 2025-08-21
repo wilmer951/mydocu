@@ -11,11 +11,11 @@ class Datoslogin extends Conexion{
     public  static function loginModelo($datosModelo, $tabla){
 
 
-        $stmt = Conexion::conectar()->prepare("SELECT id,usuario,nombres,password,id_login,rol,estado  FROM $tabla WHERE usuario = :usuario and password=:password");	
+        $stmt = Conexion::conectar()->prepare("SELECT id,usuario,nombres,password,id_login,rol,estado  FROM $tabla WHERE usuario = :usuario");	
 
         
         $stmt->bindParam(":usuario", $datosModelo["usuario"], PDO::PARAM_STR);
-        $stmt->bindParam(":password", $datosModelo["password"], PDO::PARAM_STR);
+        
         
         $stmt->execute();
         

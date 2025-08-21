@@ -3,7 +3,7 @@
 // Incluir tus controladores si los necesitas
 require_once "../../Controlador/controlador_login.php";
 require_once "../../Modelo/Modelo_login.php";
-require_once "../../Controlador/jwt_helper.php"; // <-- Asegúrate de que la ruta es correcta
+require_once "../../helper/jwt_helper.php"; // <-- Asegúrate de que la ruta es correcta
 
 // Clave secreta (la misma usada al generar el token)
 $secret = "alkejlkmfielsl"; 

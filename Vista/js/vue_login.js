@@ -16,7 +16,7 @@ Vue.createApp({
       }
 
       try {
-        const res = await fetch("Vista/ajax/ajax_login.php", {
+        const res = await fetch("Vista/api/api_login.php", {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",

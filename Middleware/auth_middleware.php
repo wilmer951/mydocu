@@ -1,6 +1,6 @@
 <?php
 // auth_middleware.php
-require_once __DIR__ . "/jwt_helper.php";
+require_once __DIR__ . '/../Helper/jwt_helper.php';
 
 function authenticate() {
   $headers = getallheaders();

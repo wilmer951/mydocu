@@ -1,71 +1,44 @@
 <?php
 
-require_once "jwt_helper.php";
+require_once __DIR__ . '/../Helper/jwt_helper.php';
 
 class Controlador_login {
 
-    // ********************* METODO LOGIN  *******************************    
+    // Este código ya es correcto, asumiendo que tu modelo lo soporta
 public static function loginControlador($usuario, $password){
+            $secret_key = "alkejlkmfielsl"; 
+            $nameusuario = strtoupper($usuario);
 
-   $secret_key = "alkejlkmfielsl"; // Cambia esto por algo seguro
-                
-    $nameusuario=strtoupper($usuario);
+            // Primer paso: Obtener la información del usuario por nombre de usuario
+            $datosControlador = ["usuario" => $nameusuario];
+            $respuesta = Datoslogin::loginModelo($datosControlador, "usuarios");
 
-
-    
-        $encriptar = crypt($password, '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-
-        $datosControlador = array( "usuario"=>$nameusuario, "password"=>$encriptar);
-        $respuesta = Datoslogin::loginModelo($datosControlador, "usuarios");
-
-
-
-        if ($respuesta==false) 
-        { 
-
-            
-            return ["estado" => false, "mensaje" => "datos incorrectos"];
-        }
-
-
-
-        else if ($respuesta["usuario"]==$nameusuario && $respuesta["password"]==$encriptar && $respuesta["estado"]==1)
-
-            {
-
-            
-            
-            session_start();
-            $_SESSION["validar"] = true;
-            $_SESSION["usuario"] = $respuesta["usuario"];
-            $_SESSION["nameusr"] = $respuesta["nombres"];
-            $_SESSION["rol"] = $respuesta["rol"];
-            $_SESSION["id"] = $respuesta["id"];
-            
-
-                $payload = [
-                "user" => $respuesta["usuario"],
-                "name" => $respuesta["nombres"],
-                "id" => $respuesta["id"],
-                    "rol" => $respuesta["rol"], // ✅ Añadir el rol
-                "iat" => time(),
-                "exp" => time() + 3600 // token válido 1 hora
+            // Verificar si el usuario existe y su contraseña
+            if ($respuesta && password_verify($password, $respuesta["password"])) {
+                if ($respuesta["estado"] == 1) {
+                    // El usuario existe, la contraseña es correcta y está activo.
                     
-                 ];
+                    // Aquí puedes iniciar tu sesión si la usas
+                    // session_start();
+                    // ...
 
-            $token = generate_jwt($payload, $secret_key);
+                    $payload = [
+                        "user" => $respuesta["usuario"],
+                        "name" => $respuesta["nombres"],
+                        "id" => $respuesta["id"],
+                        "rol" => $respuesta["rol"],
+                        "iat" => time(),
+                        "exp" => time() + 3600
+                    ];
+                    $token = generate_jwt($payload, $secret_key);
 
-            return ["estado" => true, "mensaje" => "Login exitoso", "token" => $token];
-                    
-
-            
+                    return ["estado" => true, "mensaje" => "Login exitoso", "token" => $token];
+                } else {
+                    return ["estado" => false, "mensaje" => "Usuario inactivo"];
+                }
+            } else {
+                // La verificación falló, la contraseña es incorrecta o el usuario no existe.
+                return ["estado" => false, "mensaje" => "Usuario o contraseña incorrectos"];
+            }
         }
-
-   
-    
-
-
-}
-
-
 }
