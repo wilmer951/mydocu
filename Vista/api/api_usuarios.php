@@ -1,4 +1,5 @@
 <?php
+
 require_once "../../Controlador/Controlador_usuarios.php";
 require_once "../../Modelo/Modelo_usuarios.php";
 require_once "../../Middleware/auth_middleware.php";
@@ -20,6 +21,7 @@ if ($rol !== 1) {
     echo json_encode(["error" => "No tienes permisos"]);
     exit;
 }
+
 
 // Manejo de métodos HTTP
 $method = $_SERVER['REQUEST_METHOD'];
@@ -52,24 +54,26 @@ switch ($method) {
 // ---------------------- FUNCIONES ------------------------
 
 function obtenerUsuarios() {
-    $status = 1;
-    $respuesta = Controlador_usuarios::obtenerUsuariosControlador($status);
+    // La función del controlador `obtenerUsuariosControlador` no recibe parámetros.
+    $respuesta = Controlador_usuarios::obtenerUsuariosControlador();
     echo json_encode($respuesta);
 }
 
 function crearUsuario() {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    if (!isset($data['nombre']) || !isset($data['email']) || !isset($data['password']) || !isset($data['rol'])) {
+    // Los campos esperados por el controlador son: usuario, nombres, password y perfil
+    if (!isset($data['usuario']) || !isset($data['nombres']) || !isset($data['password']) || !isset($data['perfil']) || !isset($data['rol'])) {
         http_response_code(400);
-        echo json_encode(["error" => "Faltan campos obligatorios"]);
+        echo json_encode(["error" => "Faltan campos obligatorios para la creación: 'usuario', 'nombres', 'password', 'perfil'."]);
         return;
     }
 
     $respuesta = Controlador_usuarios::crearUsuarioControlador(
-        $data['nombre'],
-        $data['email'],
+        $data['usuario'],
+        $data['nombres'],
         $data['password'],
+        $data['perfil'],
         $data['rol']
     );
 
@@ -77,26 +81,29 @@ function crearUsuario() {
 }
 
 function actualizarUsuario($data) {
-    if (!isset($data['id']) || !isset($data['nombre']) || !isset($data['email']) || !isset($data['rol'])) {
+    // Los campos esperados por el controlador son: idusuario, nombres, perfil, rol y estado
+    if (!isset($data['id']) || !isset($data['nombres']) || !isset($data['perfil']) || !isset($data['rol']) || !isset($data['estado'])) {
         http_response_code(400);
-        echo json_encode(["error" => "Faltan campos para actualizar"]);
+        echo json_encode(["error" => "Faltan campos obligatorios para actualizar: 'id', 'nombres', 'perfil', 'rol', 'estado'."]);
         return;
     }
 
     $respuesta = Controlador_usuarios::actualizarUsuarioControlador(
         $data['id'],
-        $data['nombre'],
-        $data['email'],
-        $data['rol']
+        $data['nombres'],
+        $data['perfil'],
+        $data['rol'],
+        $data['estado']
     );
 
     echo json_encode($respuesta);
 }
 
 function eliminarUsuario($data) {
+    // El campo esperado por el controlador es: idusuario
     if (!isset($data['id'])) {
         http_response_code(400);
-        echo json_encode(["error" => "Falta el ID del usuario"]);
+        echo json_encode(["error" => "Falta el ID del usuario ('id') para eliminar."]);
         return;
     }
 

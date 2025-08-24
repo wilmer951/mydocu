@@ -57,7 +57,7 @@ function resetearPassword() {
 
 
 
-     $respuesta = Controlador_usuarios::resetPawwordControlador($data['id_usuario'],$data['id_usuario']);
+     $respuesta = Controlador_usuarios::resetPawwordControlador($data['id_usuario'],$data['nuevaPassword']);
 
        echo json_encode($respuesta);
 }

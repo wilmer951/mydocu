@@ -1,36 +1,38 @@
 <?php
-
-// Incluir el controlador y la clase Ajax
+// Incluir el controlador y el modelo
 require_once "../../Controlador/controlador_login.php";
 require_once "../../Modelo/Modelo_login.php";
 
-// Puedes mover esta clase a un archivo separado si lo deseas
-class Ajax_login {
+// Establecer la cabecera para que la respuesta sea JSON
+header('Content-Type: application/json');
 
-    public function autoLoginAjax($usuario, $password) {
-        // Aquí puedes agregar validaciones si lo deseas
-
-        // Llamar al controlador
-        $respuesta = controlador_login::loginControlador($usuario, $password);
-
-        // Devolver respuesta al frontend
-        
-        echo json_encode($respuesta);
-    }
-}
-
-// Verificar que se hizo una solicitud POST
+// Manejar solo solicitudes POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recibir los datos del cuerpo de la solicitud en formato JSON
+    $data = json_decode(file_get_contents("php://input"), true);
 
-    // Recoger los datos enviados desde JavaScript
-    $usuario = $_POST['nameUserLogin'] ?? '';
-    $password = $_POST['namePasswordLogin'] ?? '';
+    // Validar si los campos obligatorios están presentes
+    if (!isset($data['usuario']) || !isset($data['password'])) {
+        http_response_code(400); // 400 Bad Request
+        echo json_encode(["estado" => false, "mensaje" => "Faltan campos obligatorios"]);
+        exit;
+    }
 
-    // Instanciar y llamar a la clase Ajax
-    $ajaxLogin = new Ajax_login();
-    $ajaxLogin->autoLoginAjax($usuario, $password);
+    // Llamar al controlador de login con los datos recibidos
+    $respuesta = Controlador_login::loginControlador($data['usuario'], $data['password']);
+
+    // Devolver la respuesta al cliente
+    if ($respuesta['estado']) {
+        http_response_code(200); // 200 OK
+    } else {
+        http_response_code(401); // 401 Unauthorized
+    }
+
+    echo json_encode($respuesta);
 
 } else {
-    // Si no es POST, se puede devolver un error
-    echo "Método no permitido";
+    // Si el método de solicitud no es POST, devolver un error
+    http_response_code(405); // 405 Method Not Allowed
+    echo json_encode(["estado" => false, "mensaje" => "Método no permitido"]);
 }
+?>
