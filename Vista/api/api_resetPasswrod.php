@@ -6,23 +6,7 @@ require_once "../../Middleware/auth_middleware.php";
 header('Content-Type: application/json');
 
 // Verificación de autenticación vía JWT
-$headers = getallheaders();
-$rol = null;
-
-$payload = authenticate(); // <- Tu función del middleware
-
-if ($payload) {
-    $rol = $payload["rol"] ?? null;
-}
-
-if ($rol !== 1) {
-    http_response_code(403);
-    echo json_encode(["error" => "No tienes permisos"]);
-    exit;
-}
-
-
-
+$payload = require_role_for_route();
 
 $method = $_SERVER['REQUEST_METHOD'];
 

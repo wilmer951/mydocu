@@ -11,7 +11,7 @@ public static function loginControlador($usuario, $password){
 
             // Primer paso: Obtener la información del usuario por nombre de usuario
             $datosControlador = ["usuario" => $nameusuario];
-            $respuesta = Datoslogin::loginModelo($datosControlador, "usuarios");
+            $respuesta = Datoslogin::loginModelo($datosControlador);
 
             // Verificar si el usuario existe y su contraseña
             if ($respuesta && password_verify($password, $respuesta["password"])) {
@@ -26,13 +26,13 @@ public static function loginControlador($usuario, $password){
                         "user" => $respuesta["usuario"],
                         "name" => $respuesta["nombres"],
                         "id" => $respuesta["id"],
-                        "rol" => $respuesta["rol"],
+                        "rol" => $respuesta["id_rol"],
                         "iat" => time(),
                         "exp" => time() + 3600
                     ];
                     $token = generate_jwt($payload, $secret_key);
 
-                    return ["estado" => true, "mensaje" => "Login exitoso", "token" => $token];
+                    return ["estado" => true, "mensaje" => "Login exitoso", "token" => $token,"rol" =>$respuesta["id_rol"]];
                 } else {
                     return ["estado" => false, "mensaje" => "Usuario inactivo"];
                 }

@@ -4,7 +4,7 @@ class Conexion {
 
     public static function conectar() {
 
-        $config = require 'C:/xampp/config.php';
+        $config = require __DIR__ . '/../Config/conexciondb.php';
 
         // Forzar conexión TCP usando 127.0.0.1 y puerto explícito
         $host = $config['DB_HOST'] === 'localhost' ? '127.0.0.1' : $config['DB_HOST'];

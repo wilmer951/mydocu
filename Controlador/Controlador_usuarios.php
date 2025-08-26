@@ -23,7 +23,7 @@ class Controlador_usuarios {
     }
     
     // ********************* METODO CREAR USUARIO ***********************
-    public static function crearUsuarioControlador($usuario, $nombres, $password,$perfil, $rol){
+    public static function crearUsuarioControlador($usuario, $nombres, $password,$perfil, $roles){
         // Encriptar la contraseña antes de enviarla al modelo
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
         
@@ -32,7 +32,7 @@ class Controlador_usuarios {
             "nombres" => $nombres,
             "password" => $passwordHash,
             "perfil" => $perfil,
-            "rol" => $rol
+            "roles" => $roles
             
         );
         
@@ -47,12 +47,13 @@ class Controlador_usuarios {
     }
     
     // ********************* METODO ACTUALIZAR USUARIO ******************
-    public static function actualizarUsuarioControlador($idusuario, $nombres, $perfil, $rol){
+    public static function actualizarUsuarioControlador($idusuario,$nombres,$perfil,$roles,$estado){
         $datosController = array(
             "id_usuario" => $idusuario,
             "nombres" => $nombres,
             "perfil" => $perfil,
-            "rol" => $rol,
+            "roles" => $roles,
+            "estado" => $estado
             
         );
         

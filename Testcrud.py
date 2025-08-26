@@ -3,10 +3,10 @@ import json
 import urllib.parse
 
 # URL base de tu API
-URL_API = 'http://localhost/PHP/base_login_crud/mydocu/Vista/api/api_usuarios.php'
+URL_API = 'http://localhost:8080/mydocu/Vista/api/api_usuarios.php'
 
 # Tu token JWT. Asegúrate de que no haya espacios en blanco extra.
-TOKEN_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoibW9ydGFsIiwibmFtZSI6IkFybWFuZG8gQ2FzYXMiLCJpZCI6Miwicm9sIjoxLCJpYXQiOjE3NTU5OTQyNjksImV4cCI6MTc1NTk5Nzg2OX0.j93ks1CsitzJBN7thigJR70K3ICqzhbzImUQpx7c8XQ'
+TOKEN_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQURNIiwibmFtZSI6IkdlbmVyaWNvIiwiaWQiOjEsInJvbCI6IjEsMiIsImlhdCI6MTc1NjIxMjI3NSwiZXhwIjoxNzU2MjE1ODc1fQ.QBvoDzg-BflxMSPVx2ZcoxEkX_4UWwGqo91AIDcQcPc'
 
 # Headers estándar para las solicitudes
 HEADERS_JSON = {
@@ -60,24 +60,26 @@ def probar_obtener_usuarios():
 def probar_crear_usuario():
     """Prueba el método POST para crear un nuevo usuario."""
     nuevo_usuario = {
-        "usuario": "mortal",
+        "usuario": "mortaldos",
         "nombres": "Armando Casas",
         "password": "111",
         "perfil": "1",
-        "rol": "1"
+        "roles": ["1", "2"]
     }
-    ejecutar_solicitud('POST', URL_API, data=nuevo_usuario)
+    ejecutar_solicitud('POST', URL_API, data=nuevo_usuario, headers=HEADERS_JSON)
 
 def probar_actualizar_usuario(id_usuario):
+ 
     """Prueba el método PUT para actualizar un usuario."""
     datos_actualizar = {
-        "id": id_usuario,
+        "id": id_usuario,  # <- CORREGIDO
         "nombres": "Nombre Actualizado",
         "perfil": "2",
-        "rol": 2, 
+        "roles": ["1"],
         "estado": 0
     }
-    ejecutar_solicitud('PUT', URL_API, data=datos_actualizar, headers=HEADERS_URLENCODED)
+    ejecutar_solicitud('PUT', URL_API, data=datos_actualizar, headers=HEADERS_JSON)
+
 
 def probar_eliminar_usuario(id_usuario):
     """Prueba el método DELETE para eliminar un usuario."""
@@ -93,17 +95,17 @@ if __name__ == "__main__":
     print("Si tu API tiene middleware de autenticación, las solicitudes POST, PUT y DELETE fallarán sin un token JWT válido.")
 
     # 1. Prueba de la funcionalidad GET
-    probar_obtener_usuarios()
+    #probar_obtener_usuarios()
     
     # 2. Prueba de la funcionalidad POST
     #probar_crear_usuario()
     
     # Asume que el ID del usuario a probar es 2.
     # Asegúrate de que este ID exista en tu base de datos.
-    #id_para_probar = 2
+    id_para_probar = 6
 
     # 3. Prueba de la funcionalidad PUT
-    # probar_actualizar_usuario(id_para_probar)
+    probar_actualizar_usuario(id_para_probar)
     
     # 4. Prueba de la funcionalidad DELETE
-    # probar_eliminar_usuario(id_para_probar)
+    #probar_eliminar_usuario(id_para_probar)

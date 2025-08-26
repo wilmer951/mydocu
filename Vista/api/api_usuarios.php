@@ -7,20 +7,7 @@ require_once "../../Middleware/auth_middleware.php";
 header('Content-Type: application/json');
 
 // Verificación de autenticación vía JWT
-$headers = getallheaders();
-$rol = null;
-
-$payload = authenticate(); // <- Función del middleware
-
-if ($payload) {
-    $rol = $payload["rol"] ?? null;
-}
-
-if ($rol !== 1) {
-    http_response_code(403);
-    echo json_encode(["error" => "No tienes permisos"]);
-    exit;
-}
+$payload = require_role_for_route();
 
 
 // Manejo de métodos HTTP
@@ -36,13 +23,11 @@ switch ($method) {
         break;
 
     case 'PUT':
-        parse_str(file_get_contents("php://input"), $_PUT);
-        actualizarUsuario($_PUT);
+        actualizarUsuario();
         break;
 
     case 'DELETE':
-        parse_str(file_get_contents("php://input"), $_DELETE);
-        eliminarUsuario($_DELETE);
+        eliminarUsuario();
         break;
 
     default:
@@ -80,11 +65,18 @@ function crearUsuario() {
     echo json_encode($respuesta);
 }
 
-function actualizarUsuario($data) {
-    // Los campos esperados por el controlador son: idusuario, nombres, perfil, rol y estado
-    if (!isset($data['id']) || !isset($data['nombres']) || !isset($data['perfil']) || !isset($data['rol']) || !isset($data['estado'])) {
+function actualizarUsuario() {
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    if (!isset($data['id']) || !isset($data['nombres']) || !isset($data['perfil']) || !isset($data['roles']) || !isset($data['estado'])) {
         http_response_code(400);
-        echo json_encode(["error" => "Faltan campos obligatorios para actualizar: 'id', 'nombres', 'perfil', 'rol', 'estado'."]);
+        echo json_encode(["error" => "Faltan campos obligatorios para actualizar: 'id', 'nombres', 'perfil', 'roles', 'estado'."]);
+        return;
+    }
+
+    if (!is_array($data['roles'])) {
+        http_response_code(400);
+        echo json_encode(["error" => "El campo 'roles' debe ser un array de IDs de rol."]);
         return;
     }
 
@@ -92,7 +84,7 @@ function actualizarUsuario($data) {
         $data['id'],
         $data['nombres'],
         $data['perfil'],
-        $data['rol'],
+        $data['roles'],
         $data['estado']
     );
 
@@ -101,6 +93,9 @@ function actualizarUsuario($data) {
 
 function eliminarUsuario($data) {
     // El campo esperado por el controlador es: idusuario
+
+    parse_str(file_get_contents("php://input"), $data);
+
     if (!isset($data['id'])) {
         http_response_code(400);
         echo json_encode(["error" => "Falta el ID del usuario ('id') para eliminar."]);

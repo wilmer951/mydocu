@@ -1,0 +1,4 @@
+<Files "ruta_permisos.php">
+    Order allow,deny
+    Deny from all
+</Files>
