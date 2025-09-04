@@ -6,7 +6,7 @@ import urllib.parse
 URL_API = 'http://localhost:8080/mydocu/Vista/api/api_usuarios.php'
 
 # Tu token JWT. Asegúrate de que no haya espacios en blanco extra.
-TOKEN_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQURNIiwibmFtZSI6IkdlbmVyaWNvIiwiaWQiOjEsInJvbCI6IjEsMiIsImlhdCI6MTc1NjIxMjI3NSwiZXhwIjoxNzU2MjE1ODc1fQ.QBvoDzg-BflxMSPVx2ZcoxEkX_4UWwGqo91AIDcQcPc'
+TOKEN_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQURNIiwibmFtZSI6IkdlbmVyaWNvIiwiaWQiOjEsInJvbCI6IjEsMiIsImlhdCI6MTc1NzAyMDMzMSwiZXhwIjoxNzU3MDIzOTMxfQ.Sw-TRwrexpXW7-hivVgyVkau5iaQAPlJePZBefzEEEQ'
 
 # Headers estándar para las solicitudes
 HEADERS_JSON = {
@@ -81,12 +81,12 @@ def probar_actualizar_usuario(id_usuario):
     ejecutar_solicitud('PUT', URL_API, data=datos_actualizar, headers=HEADERS_JSON)
 
 
-def probar_eliminar_usuario(id_usuario):
+def probar_eliminar_usuario(id_para_probar):
     """Prueba el método DELETE para eliminar un usuario."""
     datos_eliminar = {
-        "id": id_usuario
+        "id": id_para_probar
     }
-    ejecutar_solicitud('DELETE', URL_API, data=datos_eliminar, headers=HEADERS_URLENCODED)
+    ejecutar_solicitud('DELETE', URL_API, data=datos_eliminar, headers=HEADERS_JSON)
 
 
 # --- EJECUCIÓN DEL SCRIPT ---
@@ -102,10 +102,10 @@ if __name__ == "__main__":
     
     # Asume que el ID del usuario a probar es 2.
     # Asegúrate de que este ID exista en tu base de datos.
-    id_para_probar = 6
+    id_para_probar = 17
 
     # 3. Prueba de la funcionalidad PUT
-    probar_actualizar_usuario(id_para_probar)
+    #probar_actualizar_usuario(id_para_probar)
     
     # 4. Prueba de la funcionalidad DELETE
-    #probar_eliminar_usuario(id_para_probar)
+    probar_eliminar_usuario(id_para_probar)

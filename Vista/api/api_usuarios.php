@@ -68,13 +68,13 @@ function crearUsuario() {
 function actualizarUsuario() {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    if (!isset($data['id']) || !isset($data['nombres']) || !isset($data['perfil']) || !isset($data['roles']) || !isset($data['estado'])) {
+    if (!isset($data['id']) || !isset($data['nombres']) || !isset($data['perfil']) || !isset($data['rol']) || !isset($data['estado'])) {
         http_response_code(400);
         echo json_encode(["error" => "Faltan campos obligatorios para actualizar: 'id', 'nombres', 'perfil', 'roles', 'estado'."]);
         return;
     }
 
-    if (!is_array($data['roles'])) {
+    if (!is_array($data['rol'])) {
         http_response_code(400);
         echo json_encode(["error" => "El campo 'roles' debe ser un array de IDs de rol."]);
         return;
@@ -84,17 +84,17 @@ function actualizarUsuario() {
         $data['id'],
         $data['nombres'],
         $data['perfil'],
-        $data['roles'],
+        $data['rol'],
         $data['estado']
     );
 
     echo json_encode($respuesta);
 }
 
-function eliminarUsuario($data) {
+function eliminarUsuario() {
     // El campo esperado por el controlador es: idusuario
 
-    parse_str(file_get_contents("php://input"), $data);
+    $data = json_decode(file_get_contents("php://input"), true);
 
     if (!isset($data['id'])) {
         http_response_code(400);

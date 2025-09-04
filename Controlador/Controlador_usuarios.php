@@ -49,7 +49,7 @@ class Controlador_usuarios {
     // ********************* METODO ACTUALIZAR USUARIO ******************
     public static function actualizarUsuarioControlador($idusuario,$nombres,$perfil,$roles,$estado){
         $datosController = array(
-            "id_usuario" => $idusuario,
+            "id" => $idusuario,
             "nombres" => $nombres,
             "perfil" => $perfil,
             "roles" => $roles,

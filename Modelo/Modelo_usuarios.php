@@ -95,7 +95,7 @@ public static function actualizarUsuarioModelo($data) {
         // 1. Actualizar la información del usuario en la tabla 'usuarios'
         $stmt_usuario = $conexion->prepare("UPDATE usuarios SET nombres=:nombres, perfil=:perfil,estado=:estado WHERE id=:id");
         
-        $stmt_usuario->bindParam(":id", $data["id_usuario"], PDO::PARAM_INT);
+        $stmt_usuario->bindParam(":id", $data["id"], PDO::PARAM_INT);
         $stmt_usuario->bindParam(":nombres", $data["nombres"], PDO::PARAM_STR);
         $stmt_usuario->bindParam(":perfil", $data["perfil"], PDO::PARAM_INT);
         $stmt_usuario->bindParam(":estado", $data["estado"], PDO::PARAM_INT);
