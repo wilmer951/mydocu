@@ -8,4 +8,6 @@ return [
     'api_usuarios.php'       => [1],        // Solo Admin
     'api_resetPasswrod.php'  => [1],        // Solo Admin
     'api_publica.php'        => [],         // Cualquier usuario autenticado
+    'api_roles.php'        => [1],         // Cualquier usuario autenticado
+    'api_perfiles.php'        => [1],         // Cualquier usuario autenticado
 ];

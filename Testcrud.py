@@ -3,10 +3,10 @@ import json
 import urllib.parse
 
 # URL base de tu API
-URL_API = 'http://localhost:8080/mydocu/Vista/api/api_usuarios.php'
+URL_API = 'http://localhost:8080/mydocu/Vista/api/api_roles.php'
 
 # Tu token JWT. Asegúrate de que no haya espacios en blanco extra.
-TOKEN_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQURNIiwibmFtZSI6IkdlbmVyaWNvIiwiaWQiOjEsInJvbCI6IjEsMiIsImlhdCI6MTc1NzAyMDMzMSwiZXhwIjoxNzU3MDIzOTMxfQ.Sw-TRwrexpXW7-hivVgyVkau5iaQAPlJePZBefzEEEQ'
+TOKEN_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQURNIiwibmFtZSI6ImFkbWluaXN0cmFkb3IiLCJpZCI6MSwicm9sIjoiMSwyIiwiaWF0IjoxNzU3MDk4ODQzLCJleHAiOjE3NTcxMDI0NDN9.uxx_djWhHWZJtxNyklMjD0FpmK0dIIRCGFzXWUzumWU'
 
 # Headers estándar para las solicitudes
 HEADERS_JSON = {
@@ -95,17 +95,17 @@ if __name__ == "__main__":
     print("Si tu API tiene middleware de autenticación, las solicitudes POST, PUT y DELETE fallarán sin un token JWT válido.")
 
     # 1. Prueba de la funcionalidad GET
-    #probar_obtener_usuarios()
+    probar_obtener_usuarios()
     
     # 2. Prueba de la funcionalidad POST
     #probar_crear_usuario()
     
     # Asume que el ID del usuario a probar es 2.
     # Asegúrate de que este ID exista en tu base de datos.
-    id_para_probar = 17
+    #id_para_probar = 17
 
     # 3. Prueba de la funcionalidad PUT
     #probar_actualizar_usuario(id_para_probar)
     
     # 4. Prueba de la funcionalidad DELETE
-    probar_eliminar_usuario(id_para_probar)
+    #probar_eliminar_usuario(id_para_probar)
