@@ -3,10 +3,12 @@ import json
 import urllib.parse
 
 # URL base de tu API
-URL_API = 'http://localhost:8080/mydocu/Vista/api/api_roles.php'
+URL_API = 'http://localhost/php/base_login_crud/mydocu/Vista/api/api_perfiles.php'
+# CORRECCIÓN: La URL apuntaba a perfiles, pero las pruebas son para usuarios.
+URL_API = 'http://localhost/php/base_login_crud/mydocu/Vista/api/api_usuarios.php'
 
 # Tu token JWT. Asegúrate de que no haya espacios en blanco extra.
-TOKEN_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQURNIiwibmFtZSI6ImFkbWluaXN0cmFkb3IiLCJpZCI6MSwicm9sIjoiMSwyIiwiaWF0IjoxNzU3MDk4ODQzLCJleHAiOjE3NTcxMDI0NDN9.uxx_djWhHWZJtxNyklMjD0FpmK0dIIRCGFzXWUzumWU'
+TOKEN_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQURNIiwibmFtZSI6IkdlbmVyaWNvIiwiaWQiOjEsInJvbCI6IjEsMiIsImlhdCI6MTc1NzE2NzQ3MCwiZXhwIjoxNzU3MTcxMDcwfQ.m-7fLyjVbvkOfvlHKH1ljy_7NMP_8S0d3qOxYLP5akk'
 
 # Headers estándar para las solicitudes
 HEADERS_JSON = {
@@ -20,6 +22,7 @@ HEADERS_URLENCODED = {
 }
 
 def ejecutar_solicitud(metodo, url, data=None, headers=HEADERS_JSON):
+def ejecutar_solicitud(metodo, url, data=None):
     """
     Función de utilidad para ejecutar solicitudes HTTP y manejar errores de forma centralizada.
     
@@ -32,6 +35,7 @@ def ejecutar_solicitud(metodo, url, data=None, headers=HEADERS_JSON):
     print(f"--- Probando {metodo.upper()}: {url} ---")
     try:
         response = requests.request(metodo, url, headers=headers, json=data if headers['Content-Type'] == 'application/json' else None, data=data if headers['Content-Type'] == 'application/x-www-form-urlencoded' else None)
+        response = requests.request(metodo, url, headers=HEADERS_JSON, json=data)
         response.raise_for_status()
 
         # Intenta decodificar la respuesta JSON si no está vacía
@@ -65,20 +69,27 @@ def probar_crear_usuario():
         "password": "111",
         "perfil": "1",
         "roles": ["1", "2"]
+        "perfil": 1,
+        "rol": [1, 2]  # CORRECCIÓN: La API espera 'rol', no 'roles'
     }
     ejecutar_solicitud('POST', URL_API, data=nuevo_usuario, headers=HEADERS_JSON)
+    ejecutar_solicitud('POST', URL_API, data=nuevo_usuario)
 
 def probar_actualizar_usuario(id_usuario):
  
     """Prueba el método PUT para actualizar un usuario."""
     datos_actualizar = {
         "id": id_usuario,  # <- CORREGIDO
+        "id": id_usuario,
         "nombres": "Nombre Actualizado",
         "perfil": "2",
         "roles": ["1"],
+        "perfil": 2,
+        "rol": [1],  # CORRECCIÓN: La API espera 'rol', no 'roles'
         "estado": 0
     }
     ejecutar_solicitud('PUT', URL_API, data=datos_actualizar, headers=HEADERS_JSON)
+    ejecutar_solicitud('PUT', URL_API, data=datos_actualizar)
 
 
 def probar_eliminar_usuario(id_para_probar):
@@ -87,6 +98,7 @@ def probar_eliminar_usuario(id_para_probar):
         "id": id_para_probar
     }
     ejecutar_solicitud('DELETE', URL_API, data=datos_eliminar, headers=HEADERS_JSON)
+    ejecutar_solicitud('DELETE', URL_API, data=datos_eliminar)
 
 
 # --- EJECUCIÓN DEL SCRIPT ---
@@ -99,13 +111,17 @@ if __name__ == "__main__":
     
     # 2. Prueba de la funcionalidad POST
     #probar_crear_usuario()
+    probar_crear_usuario()
     
     # Asume que el ID del usuario a probar es 2.
     # Asegúrate de que este ID exista en tu base de datos.
     #id_para_probar = 17
+    id_para_probar = 20 # <- Cambia este ID por uno que exista o que se haya creado
 
     # 3. Prueba de la funcionalidad PUT
     #probar_actualizar_usuario(id_para_probar)
+    probar_actualizar_usuario(id_para_probar)
     
     # 4. Prueba de la funcionalidad DELETE
     #probar_eliminar_usuario(id_para_probar)
+    probar_eliminar_usuario(id_para_probar)

@@ -45,7 +45,7 @@ def get_jwt_token(login_url, username, password):
 
 if __name__ == "__main__":
     # Example usage:
-    LOGIN_URL = 'http://localhost:8080/mydocu/Vista/api/api_login.php'
+    LOGIN_URL = 'http://localhost/php/base_login_crud/mydocu/Vista/api/api_login.php'
     USERNAME = 'adm'
     PASSWORD = '12345'
     

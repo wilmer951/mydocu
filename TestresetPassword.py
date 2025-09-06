@@ -1,7 +1,7 @@
 import requests
 import json
 
-url = 'http://localhost/PHP/base_login_crud/mydocu/Vista/api/api_usuarios.php'
+url = 'http://localhost/php/base_login_crud/mydocu/Vista/api/api_usuarios.php'
 
 # Los datos deben ser enviados como un diccionario y luego convertidos a JSON
 data_to_send = {'id_usuario': '1', 'nuevaPassword': '12345'}
